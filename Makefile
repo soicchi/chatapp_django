@@ -1,4 +1,4 @@
-PHONY: build up stop down startapp makemigrations migrate shell test
+PHONY: build up stop down startapp makemigrations migrate shell test update_lock
 
 build:
 	docker compose build
@@ -13,16 +13,19 @@ down:
 	docker compose down
 
 startapp:
-	docker compose run --rm web python manage.py startapp $(app_name)
+	docker compose run --rm api python manage.py startapp $(app_name)
 
 makemigrations:
-	docker compose run --rm web python manage.py makemigrations
+	docker compose run --rm api python manage.py makemigrations
 
 migrate:
-	docker compose run --rm web python manage.py migrate
+	docker compose run --rm api python manage.py migrate
 
 shell:
-	docker compose run --rm web python manage.py shell
+	docker compose run --rm api python manage.py shell
 
 test:
-	docker compose run --rm web pytest
+	docker compose run --rm api pytest
+
+update_lock:
+	docker compose run --rm api poetry lock
