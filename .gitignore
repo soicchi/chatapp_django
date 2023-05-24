@@ -1,0 +1,8 @@
+# local env file
+.env
+
+# mysql files
+mysql
+
+# cache
+**__pycache__**

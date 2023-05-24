@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.0
+    container_name: chatapp_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  api:
+    build: .
+    container_name: chatapp_api
+    working_dir: /app
+    env_file: .env
+    volumes:
+      - .:/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
