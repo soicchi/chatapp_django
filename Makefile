@@ -1,4 +1,4 @@
-PHONY: build up stop down startapp makemigrations migrate shell test update_lock black isort flake8 pytest
+PHONY: build up stop down startapp makemigrations migrate shell test update_lock black isort flake8 pytest mypy
 
 build:
 	docker compose build
@@ -41,3 +41,6 @@ flake8:
 
 pytest:
 	doker compose run --rm api pytest ${file}
+
+mypy:
+	docker compose run --rm api mypy .
