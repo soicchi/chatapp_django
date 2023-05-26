@@ -1,4 +1,4 @@
-PHONY: build up stop down startapp makemigrations migrate shell test update_lock
+PHONY: build up stop down startapp makemigrations migrate shell test update_lock black isort
 
 build:
 	docker compose build
@@ -29,3 +29,9 @@ test:
 
 update_lock:
 	docker compose run --rm api poetry lock
+
+black:
+	docker compose run --rm api black .
+
+isort:
+	docker compose run --rm api isort .
