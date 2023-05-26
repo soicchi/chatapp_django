@@ -1,4 +1,4 @@
-PHONY: build up stop down startapp makemigrations migrate shell test update_lock black isort
+PHONY: build up stop down startapp makemigrations migrate shell test update_lock black isort flake8
 
 build:
 	docker compose build
@@ -35,3 +35,6 @@ black:
 
 isort:
 	docker compose run --rm api isort .
+
+flake8:
+	docker compose run --rm api flake8
