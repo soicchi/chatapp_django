@@ -28,7 +28,7 @@ shell:
 	docker compose run --rm api python manage.py shell
 
 test:
-	docker compose run --rm api pytest
+	docker compose run --rm api pytest -v
 
 update_lock:
 	docker compose run --rm api poetry lock
