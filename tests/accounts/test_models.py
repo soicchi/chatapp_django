@@ -15,19 +15,26 @@ def test_create_user():
     assert new_user.name == name
     assert new_user.email == email
     assert new_user.check_password(password)
-    assert new_user.is_staff == False
-    assert new_user.is_superuser == False
+    assert not new_user.is_staff
+    assert not new_user.is_superuser
+
+
+@pytest.mark.django_db
+def test_create_user_with_missing_fields():
+    name = "testuser"
+    email = "test@test.com"
+    password = "passwordtest"
 
     # nameがない場合
-    with pytest.raises(ValueError, match="The given name must be set"):
+    with pytest.raises(ValueError, match="ユーザー名を入力してください"):
         User.objects.create_user(None, email, password)
 
     # emailがない場合
-    with pytest.raises(ValueError, match="The given email must be set"):
+    with pytest.raises(ValueError, match="メールアドレスを入力してください"):
         User.objects.create_user(name, None, password)
 
     # passwordがない場合
-    with pytest.raises(ValueError, match="The given password must be set"):
+    with pytest.raises(ValueError, match="パスワードを入力してください"):
         User.objects.create_user(name, email, None)
 
 
@@ -42,5 +49,14 @@ def test_create_superuser():
     assert new_superuser.name == name
     assert new_superuser.email == email
     assert new_superuser.check_password(password)
-    assert new_superuser.is_staff == True
-    assert new_superuser.is_superuser == True
+    assert new_superuser.is_staff
+    assert new_superuser.is_superuser
+
+
+@pytest.mark.django_db
+def test_string_representation():
+    name = "testuser"
+    email = "test@test.com"
+    password = "passwordtest"
+    user = User.objects.create_user(name, email, password)
+    assert str(user) == email

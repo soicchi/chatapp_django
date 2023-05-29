@@ -10,11 +10,11 @@ class CustomUserManager(BaseUserManager):
     def create_user(self, name, email, password):
         # 各必須の値が与えられているかチェック
         if not name:
-            raise ValueError("The given name must be set")
+            raise ValueError("ユーザー名を入力してください")
         elif not email:
-            raise ValueError("The given email must be set")
+            raise ValueError("メールアドレスを入力してください")
         elif not password:
-            raise ValueError("The given password must be set")
+            raise ValueError("パスワードを入力してください")
 
         email = self.normalize_email(email)
         new_user = self.model(name=name, email=email)
@@ -37,10 +37,10 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """ユーザーの認証モデル"""
 
-    name = models.CharField(max_length=255, blank=False, null=False)
-    email = models.EmailField(max_length=255, unique=True, null=False)
-    password = models.CharField(max_length=255, null=False)
-    last_login = models.DateTimeField(blank=True, null=True)
+    name = models.CharField(verbose_name="ユーザー名", max_length=255)
+    email = models.EmailField(verbose_name="メールアドレス", max_length=255, unique=True)
+    password = models.CharField(verbose_name="パスワード", max_length=255)
+    last_login = models.DateTimeField(verbose_name="最終ログイン", blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
