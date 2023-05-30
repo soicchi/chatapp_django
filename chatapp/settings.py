@@ -155,3 +155,28 @@ REST_FRAMEWORK = {
         "user": "1000/hour",
     },
 }
+
+# logging settings
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "develop": {
+            "format": "{name} {levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        }
+    },
+    "handlers": {
+        "develop": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "develop",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["develop"],
+            "level": "INFO",
+        },
+    },
+}
