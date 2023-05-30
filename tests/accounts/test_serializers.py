@@ -36,7 +36,7 @@ def test_signup_with_blank_name():
     }
 
     serializer = SignUpSerializer(data=input_data)
-    with pytest.raises(ValidationError, match="ユーザー名の入力は必須です"):
+    with pytest.raises(ValidationError, match="ユーザー名が空です"):
         serializer.is_valid(raise_exception=True)
 
 
@@ -63,7 +63,7 @@ def test_signup_with_blank_email():
     }
 
     serializer = SignUpSerializer(data=input_data)
-    with pytest.raises(ValidationError, match="メールアドレスの入力は必須です"):
+    with pytest.raises(ValidationError, match="メールアドレスが空です"):
         serializer.is_valid(raise_exception=True)
 
 
@@ -90,7 +90,7 @@ def test_signup_with_blank_password():
     }
 
     serializer = SignUpSerializer(data=input_data)
-    with pytest.raises(ValidationError, match="パスワードの入力は必須です"):
+    with pytest.raises(ValidationError, match="パスワードが空です"):
         serializer.is_valid(raise_exception=True)
 
 

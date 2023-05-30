@@ -12,20 +12,20 @@ class SignUpSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "name": {
                 "error_messages": {
-                    "blank": "ユーザー名の入力は必須です",
+                    "blank": "ユーザー名が空です",
                     "max_length": "ユーザー名は255文字以内で入力してください",
                 }
             },
             "email": {
                 "error_messages": {
-                    "blank": "メールアドレスの入力は必須です",
+                    "blank": "メールアドレスが空です",
                     "max_length": "メールアドレスは255文字以内で入力してください",
                 }
             },
             "password": {
                 "write_only": True,
                 "error_messages": {
-                    "blank": "パスワードの入力は必須です",
+                    "blank": "パスワードが空です",
                     "max_length": "パスワードは255文字以内で入力してください",
                 },
             },
