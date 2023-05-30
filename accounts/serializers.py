@@ -19,7 +19,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "email": {
                 "error_messages": {
                     "blank": "メールアドレスの入力は必須です",
-                    "max_length": "メールアドレスは255文字以内で入力してください"
+                    "max_length": "メールアドレスは255文字以内で入力してください",
                 }
             },
             "password": {
@@ -27,8 +27,8 @@ class SignUpSerializer(serializers.ModelSerializer):
                 "error_messages": {
                     "blank": "パスワードの入力は必須です",
                     "max_length": "パスワードは255文字以内で入力してください",
-                }
-            }
+                },
+            },
         }
 
     def validate_password(self, input_password: str) -> str:

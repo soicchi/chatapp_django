@@ -95,7 +95,7 @@ def test_signup_with_blank_password():
 
 
 @pytest.mark.django_db
-def test_signup_with_over_length_email():
+def test_signup_with_over_length_password():
     over_length_password = "a" * 256
     input_data = {
         "name": "testuser",
