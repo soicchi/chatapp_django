@@ -39,7 +39,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 
         return input_password
 
-    def to_representation(self, instance) -> CustomUser:
+    def to_representation(self, instance: dict) -> CustomUser:
         # リフレッシュトークンとJWTをレスポンスに含める
         refresh_token = RefreshToken.for_user(instance)
         new_user = super().to_representation(instance)

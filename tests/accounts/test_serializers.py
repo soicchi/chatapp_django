@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
 from accounts.serializers import SignUpSerializer
@@ -106,3 +107,18 @@ def test_signup_with_over_length_password():
     serializer = SignUpSerializer(data=input_data)
     with pytest.raises(ValidationError, match="パスワードは255文字以内で入力してください"):
         serializer.is_valid(raise_exception=True)
+
+
+@pytest.mark.django_db
+def test_include_token_in_response():
+    User = get_user_model()
+    new_user = User.objects.create_user(
+        name="testuser",
+        email="test@test.com",
+        password="passwordtest",
+    )
+
+    serializer = SignUpSerializer(instance=new_user)
+    response = serializer.to_representation(new_user)
+    assert "refresh_token" in response
+    assert "access_token" in response
