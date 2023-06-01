@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import CustomUser
 
@@ -37,3 +38,12 @@ class SignUpSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("パスワードは8文字以上で入力してください")
 
         return input_password
+
+    def to_representation(self, instance) -> CustomUser:
+        # リフレッシュトークンとJWTをレスポンスに含める
+        refresh_token = RefreshToken.for_user(instance)
+        new_user = super().to_representation(instance)
+        new_user["refresh_token"] = str(refresh_token)
+        new_user["access_token"] = str(refresh_token.access_token)
+
+        return new_user
