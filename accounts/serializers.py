@@ -32,6 +32,15 @@ class SignUpSerializer(serializers.ModelSerializer):
             },
         }
 
+    def create(self, validated_data: dict) -> CustomUser:
+        new_user = CustomUser.objects.create_user(
+            name=validated_data["name"],
+            email=validated_data["email"],
+            password=validated_data["password"],
+        )
+
+        return new_user
+
     def validate_password(self, input_password: str) -> str:
         min_length = 8
         if len(input_password) < min_length:
