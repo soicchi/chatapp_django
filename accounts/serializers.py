@@ -56,3 +56,11 @@ class SignUpSerializer(serializers.ModelSerializer):
         new_user["access_token"] = str(refresh_token.access_token)
 
         return new_user
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    """ユーザー一覧を取得するシリアライザ"""
+
+    class Meta:
+        model = CustomUser
+        fields = ["id", "name"]
