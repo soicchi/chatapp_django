@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import CustomUser
+from utils.validations import PasswordValidation
 
 
 class SignUpSerializer(serializers.ModelSerializer):
@@ -42,13 +43,12 @@ class SignUpSerializer(serializers.ModelSerializer):
         return new_user
 
     def validate_password(self, input_password: str) -> str:
-        min_length = 8
-        if len(input_password) < min_length:
-            raise serializers.ValidationError("パスワードは8文字以上で入力してください")
+        password_validation = PasswordValidation(input_password)
+        password_validation.validate()
 
         return input_password
 
-    def to_representation(self, instance: dict) -> CustomUser:
+    def to_representation(self, instance: CustomUser) -> CustomUser:
         # リフレッシュトークンとJWTをレスポンスに含める
         refresh_token = RefreshToken.for_user(instance)
         new_user = super().to_representation(instance)
@@ -72,3 +72,14 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ["id", "name"]
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """ユーザーデータ更新用のシリアライザ"""
+
+    class Meta:
+        model = CustomUser
+        fields = ["name", "email", "password"]
+
+    def update(self, instance: CustomUser, validated_data: dict) -> CustomUser:
+        pass
