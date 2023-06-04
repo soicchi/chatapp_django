@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import CustomUser
-from .serializers import SignUpSerializer, UserListSerializer
+from .serializers import SignUpSerializer, UserListSerializer, UserRetrieveSerializer
 
 
 class SignUpAPIView(generics.CreateAPIView):
@@ -15,6 +15,14 @@ class SignUpAPIView(generics.CreateAPIView):
 class UserListAPIView(generics.ListAPIView):
     """ユーザー一覧を返すAPIクラス"""
 
-    permission_classes = [IsAuthenticated]
-    serializer_class = UserListSerializer
     queryset = CustomUser.objects.all()
+    serializer_class = UserListSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class UserRetrieveAPIView(generics.RetrieveAPIView):
+    """ユーザー詳細を返すAPIクラス"""
+
+    queryset = CustomUser.objects.all()
+    serializer_class = UserRetrieveSerializer
+    permission_classes = [IsAuthenticated]

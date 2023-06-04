@@ -59,7 +59,15 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
-    """ユーザー一覧を取得するシリアライザ"""
+    """ユーザー一覧用のシリアライザ"""
+
+    class Meta:
+        model = CustomUser
+        fields = ["id", "name"]
+
+
+class UserRetrieveSerializer(serializers.ModelSerializer):
+    """ユーザー詳細用のシリアライザ"""
 
     class Meta:
         model = CustomUser
