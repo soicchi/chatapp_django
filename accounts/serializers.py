@@ -104,6 +104,5 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 class UserDestroySerializer(serializers.Serializer):
     """ユーザーデータ削除用"""
 
-    def destroy(self):
-        target_user = self.context.get("request").user
-        target_user.delete()
+    def destroy(self, instance):
+        instance.delete()

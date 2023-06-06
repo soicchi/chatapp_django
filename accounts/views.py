@@ -1,5 +1,6 @@
 from rest_framework import generics, serializers, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from .models import CustomUser
 from .serializers import (
@@ -35,3 +36,11 @@ class UserViewSet(viewsets.ModelViewSet):
             return UserDestroySerializer
         else:
             return super().get_serializer_class()
+
+    def destroy(self, request: dict, *args, **kwargs) -> None:
+        target_user = self.get_object()
+        if request.user != target_user:
+            return Response(data={"message": "ユーザーの削除に失敗しました"}, status=403)
+        self.get_serializer().destroy(target_user)
+
+        return Response(data={"message": "ユーザーを削除しました"}, status=204)

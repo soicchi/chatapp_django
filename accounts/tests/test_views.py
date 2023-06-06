@@ -178,6 +178,7 @@ def test_destroy_user_authenticated(api_client, test_user):
         format="json",
     )
     assert response.status_code == 204
+    assert response.data["message"] == "ユーザーを削除しました"
 
     # test_userが削除されているか検証
     assert not User.objects.filter(pk=test_user.id).exists()
@@ -190,3 +191,15 @@ def test_destroy_user_unauthenticated(api_client, test_user):
         format="json",
     )
     assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_destroy_other_user(api_client, test_users):
+    # test_users[0]で認証
+    api_client.force_authenticate(test_users[0])
+    response = api_client.delete(reverse(f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_users[1].id}), format="json")
+    assert response.status_code == 403
+    assert response.data["message"] == "ユーザーの削除に失敗しました"
+
+    # test_users[1]が削除されていないか検証
+    assert User.objects.filter(pk=test_users[1].id).exists()
