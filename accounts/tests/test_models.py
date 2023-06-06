@@ -8,7 +8,7 @@ User = get_user_model()
 def test_create_user():
     name = "testuser"
     email = "test@test.com"
-    password = "testpassword"
+    password = "password"
 
     # 作成が成功の場合
     new_user = User.objects.create_user(name, email, password)
@@ -23,7 +23,7 @@ def test_create_user():
 def test_create_user_with_missing_fields():
     name = "testuser"
     email = "test@test.com"
-    password = "passwordtest"
+    password = "password"
 
     # nameがない場合
     with pytest.raises(ValueError, match="ユーザー名を入力してください"):
@@ -42,7 +42,7 @@ def test_create_user_with_missing_fields():
 def test_create_superuser():
     name = "testuser"
     email = "test@test.com"
-    password = "testpassword"
+    password = "password"
 
     # スーパーユーザー作成が成功した場合
     new_superuser = User.objects.create_superuser(name, email, password)
@@ -54,9 +54,9 @@ def test_create_superuser():
 
 
 @pytest.mark.django_db
-def test_string_representation():
+def test_user_string_representation():
     name = "testuser"
     email = "test@test.com"
-    password = "passwordtest"
+    password = "password"
     user = User.objects.create_user(name, email, password)
     assert str(user) == email
