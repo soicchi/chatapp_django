@@ -7,7 +7,7 @@ from django.db import models
 class CustomUserManager(BaseUserManager):
     """ユーザーに関する各メソッドを管理するクラス"""
 
-    def create_user(self, name, email, password):
+    def create_user(self, name: str, email: str, password: str) -> "CustomUser":
         # 各必須の値が与えられているかチェック
         if not name:
             raise ValueError("ユーザー名を入力してください")
@@ -23,7 +23,9 @@ class CustomUserManager(BaseUserManager):
 
         return new_user
 
-    def create_superuser(self, name, email, password, **extra_fields):
+    def create_superuser(
+        self, name: str, email: str, password: str, **extra_fields
+    ) -> "CustomUser":
         new_superuser = self.create_user(name, email, password)
 
         # スーパーユーザー用に値をセット

@@ -1,37 +1,22 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from utils.fields import accounts
+from utils.validations import EmailValidation, PasswordValidation, UserNameValidation
+
 from .models import CustomUser
-from utils.validations import PasswordValidation
 
 
 class SignUpSerializer(serializers.ModelSerializer):
     """新規登録用のシリアライザ"""
 
+    name = accounts.CustomNameField()
+    email = accounts.CustomEmailField()
+    password = accounts.CustomPasswordField()
+
     class Meta:
         model = CustomUser
         fields = ["name", "email", "password"]
-        extra_kwargs = {
-            "name": {
-                "error_messages": {
-                    "blank": "ユーザー名が空です",
-                    "max_length": "ユーザー名は255文字以内で入力してください",
-                }
-            },
-            "email": {
-                "error_messages": {
-                    "blank": "メールアドレスが空です",
-                    "max_length": "メールアドレスは255文字以内で入力してください",
-                }
-            },
-            "password": {
-                "write_only": True,
-                "error_messages": {
-                    "blank": "パスワードが空です",
-                    "max_length": "パスワードは255文字以内で入力してください",
-                },
-            },
-        }
 
     def create(self, validated_data: dict) -> CustomUser:
         new_user = CustomUser.objects.create_user(
@@ -41,6 +26,18 @@ class SignUpSerializer(serializers.ModelSerializer):
         )
 
         return new_user
+
+    def validate_name(self, input_name: str) -> str:
+        name_validation = UserNameValidation(input_name)
+        name_validation.validate()
+
+        return input_name
+
+    def validate_email(self, input_email: str) -> str:
+        email_validation = EmailValidation(input_email)
+        email_validation.validate()
+
+        return input_email
 
     def validate_password(self, input_password: str) -> str:
         password_validation = PasswordValidation(input_password)
@@ -77,9 +74,28 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     """ユーザーデータ更新用のシリアライザ"""
 
+    name = accounts.CustomNameField()
+    email = accounts.CustomEmailField()
+
     class Meta:
         model = CustomUser
-        fields = ["name", "email", "password"]
+        fields = ["name", "email"]
 
     def update(self, instance: CustomUser, validated_data: dict) -> CustomUser:
-        pass
+        instance.name = validated_data["name"]
+        instance.email = validated_data["email"]
+        instance.save()
+
+        return instance
+
+    def validate_name(self, input_name: str) -> str:
+        name_validation = UserNameValidation(input_name)
+        name_validation.validate()
+
+        return input_name
+
+    def validate_email(self, input_email: str) -> str:
+        email_validation = EmailValidation(input_email)
+        email_validation.validate()
+
+        return input_email

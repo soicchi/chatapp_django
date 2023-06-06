@@ -122,7 +122,41 @@ def test_fetch_user_detail_unauthenticated(api_client, test_user):
 @pytest.mark.django_db
 def test_fetch_user_detail_not_found(api_client, test_user):
     api_client.force_authenticate(user=test_user)
+    not_existed_user_id = test_user.id + 1
     response = api_client.get(
-        reverse("accounts:user_detail", kwargs={"pk": test_user.id + 1})
+        reverse("accounts:user_detail", kwargs={"pk": not_existed_user_id})
     )
     assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_update_user_authenticated(api_client, test_user):
+    api_client.force_authenticate(user=test_user)
+    update_data = {
+        "name": "updated_user",
+        "email": "updated@test.com",
+    }
+    response = api_client.patch(
+        reverse("accounts:user_update", kwargs={"pk": test_user.id}),
+        data=update_data,
+        format="json",
+    )
+    assert response.status_code == 200
+    # DBを更新
+    test_user.refresh_from_db()
+    assert test_user.name == update_data["name"]
+    assert test_user.email == update_data["email"]
+
+
+@pytest.mark.django_db
+def test_update_user_unauthenticated(api_client, test_user):
+    update_data = {
+        "name": "updated_user",
+        "email": "updated@test.com",
+    }
+    response = api_client.patch(
+        reverse("accounts:user_update", kwargs={"pk": test_user.id}),
+        data=update_data,
+        format="json",
+    )
+    assert response.status_code == 401
