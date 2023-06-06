@@ -4,7 +4,6 @@ from rest_framework.exceptions import ValidationError
 
 from accounts.serializers import SignUpSerializer, UserUpdateSerializer
 
-
 TOO_LONG_NAME_ERROR_MESSAGE = "ユーザー名は255文字以内で入力してください"
 BLANK_NAME_ERROR_MESSAGE = "ユーザー名が空です"
 TOO_LONG_EMAIL_ERROR_MESSAGE = "メールアドレスは255文字以内で入力してください"
@@ -18,8 +17,6 @@ MAX_PASSWORD_LENGTH = 255
 MIN_PASSWORD_LENGTH = 8
 
 
-
-
 def test_signup_validate_password():
     serializer = SignUpSerializer()
 
@@ -28,13 +25,11 @@ def test_signup_validate_password():
     assert serializer.validate_password(valid_password) == valid_password
 
     with pytest.raises(ValidationError, match=TOO_SHORT_PASSWORD_ERROR_MESSAGE):
-
         # 7文字のpasswordを生成
         too_short_password = "a" * (MIN_PASSWORD_LENGTH - 1)
         serializer.validate_password(too_short_password)
 
     with pytest.raises(ValidationError, match=TOO_LONG_PASSWORD_ERROR_MESSAGE):
-
         # 256文字のpasswordを生成
         too_long_password = "a" * (MAX_PASSWORD_LENGTH + 1)
         serializer.validate_password(too_long_password)
@@ -63,7 +58,6 @@ def test_signup_validate_name():
         serializer.validate_name("")
 
     with pytest.raises(ValidationError, match=TOO_LONG_NAME_ERROR_MESSAGE):
-
         # 256文字のnameを生成
         too_long_name = "a" * (MAX_NAME_LENGTH + 1)
         serializer.validate_name(too_long_name)
@@ -81,7 +75,6 @@ def test_signup_validate_email():
         serializer.validate_email("")
 
     with pytest.raises(ValidationError, match=TOO_LONG_EMAIL_ERROR_MESSAGE):
-
         # 256文字のemailを生成
         too_long_email = "a" * (MAX_EMAIL_LENGTH - len("@test.com") + 1) + "@test.com"
         serializer.validate_email(too_long_email)
@@ -217,7 +210,7 @@ def test_include_token_in_response():
 
 @pytest.mark.django_db
 def test_update_user_validate_name():
-    serializer = SignUpSerializer()
+    serializer = UserUpdateSerializer()
 
     # 255文字のnameを生成
     valid_name = "a" * MAX_NAME_LENGTH
@@ -227,7 +220,6 @@ def test_update_user_validate_name():
         serializer.validate_name("")
 
     with pytest.raises(ValidationError, match=TOO_LONG_NAME_ERROR_MESSAGE):
-
         # 256文字のnameを生成
         too_long_name = "a" * (MAX_NAME_LENGTH + 1)
         serializer.validate_name(too_long_name)
@@ -235,7 +227,7 @@ def test_update_user_validate_name():
 
 @pytest.mark.django_db
 def test_update_user_validate_email():
-    serializer = SignUpSerializer()
+    serializer = UserUpdateSerializer()
 
     # 255文字のemailを生成
     valid_email = "a" * (MAX_EMAIL_LENGTH - len("@test.com")) + "@test.com"
@@ -245,7 +237,66 @@ def test_update_user_validate_email():
         serializer.validate_email("")
 
     with pytest.raises(ValidationError, match=TOO_LONG_EMAIL_ERROR_MESSAGE):
-
         # 256文字のemailを生成
         too_long_email = "a" * (MAX_EMAIL_LENGTH - len("@test.com") + 1) + "@test.com"
         serializer.validate_email(too_long_email)
+
+
+@pytest.mark.django_db
+def test_update_user_error_message_with_too_long_name():
+    # 256文字のnameを生成
+    too_long_name = "a" * (MAX_NAME_LENGTH + 1)
+    invalid_input_data = {
+        "name": too_long_name,
+        "email": "test@test.com",
+    }
+    serializer = UserUpdateSerializer(data=invalid_input_data)
+    assert serializer.is_valid() is False
+    assert "name" in serializer.errors
+
+    # エラーメッセージが正しいか検証
+    assert str(serializer.errors["name"][0]) == TOO_LONG_NAME_ERROR_MESSAGE
+
+
+@pytest.mark.django_db
+def test_update_user_error_message_with_too_long_email():
+    # 256文字のemailを生成
+    too_long_email = "a" * (MAX_EMAIL_LENGTH - len("@test.com") + 1) + "@test.com"
+    invalid_input_data = {
+        "name": "testuser",
+        "email": too_long_email,
+    }
+    serializer = UserUpdateSerializer(data=invalid_input_data)
+    assert serializer.is_valid() is False
+    assert "email" in serializer.errors
+
+    # エラーメッセージが正しいか検証
+    assert str(serializer.errors["email"][0]) == TOO_LONG_EMAIL_ERROR_MESSAGE
+
+
+@pytest.mark.django_db
+def test_update_user_error_message_with_blank_name():
+    invalid_input_data = {
+        "name": "",
+        "email": "test@test.com",
+    }
+    serializer = UserUpdateSerializer(data=invalid_input_data)
+    assert serializer.is_valid() is False
+    assert "name" in serializer.errors
+
+    # エラーメッセージが正しいか検証
+    assert str(serializer.errors["name"][0]) == BLANK_NAME_ERROR_MESSAGE
+
+
+@pytest.mark.django_db
+def test_update_user_error_message_with_blank_email():
+    invalid_input_data = {
+        "name": "testuser",
+        "email": "",
+    }
+    serializer = UserUpdateSerializer(data=invalid_input_data)
+    assert serializer.is_valid() is False
+    assert "email" in serializer.errors
+
+    # エラーメッセージが正しいか検証
+    assert str(serializer.errors["email"][0]) == BLANK_EMAIL_ERROR_MESSAGE
