@@ -8,11 +8,11 @@ from .models import CustomUser
 
 
 class SignUpSerializer(serializers.ModelSerializer):
-    """新規登録用のシリアライザ"""
+    """新規登録用"""
 
     name = accounts.CustomNameField()
     email = accounts.CustomEmailField()
-    password = accounts.CustomPasswordField()
+    password = accounts.CustomPasswordField(write_only=True)
 
     class Meta:
         model = CustomUser
@@ -56,7 +56,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
-    """ユーザー一覧用のシリアライザ"""
+    """ユーザー一覧用"""
 
     class Meta:
         model = CustomUser
@@ -64,7 +64,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
 
 class UserRetrieveSerializer(serializers.ModelSerializer):
-    """ユーザー詳細用のシリアライザ"""
+    """ユーザー詳細用"""
 
     class Meta:
         model = CustomUser
@@ -72,7 +72,7 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
-    """ユーザーデータ更新用のシリアライザ"""
+    """ユーザーデータ更新用"""
 
     name = accounts.CustomNameField()
     email = accounts.CustomEmailField()
@@ -99,3 +99,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         email_validation.validate()
 
         return input_email
+
+
+class UserDestroySerializer(serializers.Serializer):
+    """ユーザーデータ削除用"""
+
+    def destroy(self):
+        target_user = self.context.get("request").user
+        target_user.delete()

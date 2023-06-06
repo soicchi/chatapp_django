@@ -88,7 +88,7 @@ def test_signup_error_message_with_blank_name():
         "password": "password",
     }
     serializer = SignUpSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "name" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -103,7 +103,7 @@ def test_signup_error_message_with_blank_email():
         "password": "password",
     }
     serializer = SignUpSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "email" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -118,7 +118,7 @@ def test_signup_error_message_with_blank_password():
         "password": "",
     }
     serializer = SignUpSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "password" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -135,7 +135,7 @@ def test_signup_error_message_with_too_long_name():
         "password": "password",
     }
     serializer = SignUpSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "name" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -152,7 +152,7 @@ def test_signup_error_message_with_too_long_email():
         "password": "password",
     }
     serializer = SignUpSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "email" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -169,7 +169,7 @@ def test_signup_error_message_with_too_long_password():
         "password": too_long_password,
     }
     serializer = SignUpSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "password" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -186,7 +186,7 @@ def test_signup_error_message_with_too_short_password():
         "password": too_short_password,
     }
     serializer = SignUpSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "password" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -251,7 +251,7 @@ def test_update_user_error_message_with_too_long_name():
         "email": "test@test.com",
     }
     serializer = UserUpdateSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "name" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -267,7 +267,7 @@ def test_update_user_error_message_with_too_long_email():
         "email": too_long_email,
     }
     serializer = UserUpdateSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "email" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -281,7 +281,7 @@ def test_update_user_error_message_with_blank_name():
         "email": "test@test.com",
     }
     serializer = UserUpdateSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "name" in serializer.errors
 
     # エラーメッセージが正しいか検証
@@ -295,7 +295,7 @@ def test_update_user_error_message_with_blank_email():
         "email": "",
     }
     serializer = UserUpdateSerializer(data=invalid_input_data)
-    assert serializer.is_valid() is False
+    assert not serializer.is_valid()
     assert "email" in serializer.errors
 
     # エラーメッセージが正しいか検証
