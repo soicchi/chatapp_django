@@ -39,10 +39,14 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """ユーザーの認証モデル"""
 
-    name = models.CharField(verbose_name="ユーザー名", max_length=255)
-    email = models.EmailField(verbose_name="メールアドレス", max_length=255, unique=True)
+    name = models.CharField(
+        verbose_name="ユーザー名", max_length=255, blank=False, null=False
+    )
+    email = models.EmailField(
+        verbose_name="メールアドレス", max_length=255, unique=True, blank=False, null=False
+    )
     password = models.CharField(verbose_name="パスワード", max_length=255)
-    last_login = models.DateTimeField(verbose_name="最終ログイン", blank=True)
+    last_login = models.DateTimeField(verbose_name="最終ログイン", blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

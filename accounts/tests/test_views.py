@@ -197,7 +197,12 @@ def test_destroy_user_unauthenticated(api_client, test_user):
 def test_destroy_other_user(api_client, test_users):
     # test_users[0]で認証
     api_client.force_authenticate(test_users[0])
-    response = api_client.delete(reverse(f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_users[1].id}), format="json")
+    response = api_client.delete(
+        reverse(
+            f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_users[1].id}
+        ),
+        format="json",
+    )
     assert response.status_code == 403
     assert response.data["message"] == "ユーザーの削除に失敗しました"
 
