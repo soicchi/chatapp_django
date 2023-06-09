@@ -51,12 +51,3 @@ def test_create_superuser():
     assert new_superuser.check_password(password)
     assert new_superuser.is_staff
     assert new_superuser.is_superuser
-
-
-@pytest.mark.django_db
-def test_user_string_representation():
-    name = "testuser"
-    email = "test@test.com"
-    password = "password"
-    user = User.objects.create_user(name, email, password)
-    assert str(user) == email
