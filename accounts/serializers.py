@@ -1,3 +1,5 @@
+from django.contrib.auth import authenticate
+
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -53,6 +55,18 @@ class SignUpSerializer(serializers.ModelSerializer):
         new_user["access_token"] = str(refresh_token.access_token)
 
         return new_user
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def validate(self, data: dict) -> dict:
+        user = authenticate(username=data["email"], password=data["password"])
+        if user is None:
+            raise serializers.ValidationError("メールアドレスもしくはパスワードが間違っています")
+
+        return data
 
 
 class UserListSerializer(serializers.ModelSerializer):
