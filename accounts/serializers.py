@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from utils.fields import accounts
+from .fields import CustomNameField, CustomEmailField, CustomPasswordField
 from utils.validations import EmailValidation, PasswordValidation, UserNameValidation
 
 from .models import CustomUser
@@ -10,9 +10,9 @@ from .models import CustomUser
 class SignUpSerializer(serializers.ModelSerializer):
     """新規登録用"""
 
-    name = accounts.CustomNameField()
-    email = accounts.CustomEmailField()
-    password = accounts.CustomPasswordField(write_only=True)
+    name = CustomNameField()
+    email = CustomEmailField()
+    password = CustomPasswordField(write_only=True)
 
     class Meta:
         model = CustomUser
@@ -74,8 +74,8 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     """ユーザーデータ更新用"""
 
-    name = accounts.CustomNameField()
-    email = accounts.CustomEmailField()
+    name = CustomNameField()
+    email = CustomEmailField()
 
     class Meta:
         model = CustomUser
