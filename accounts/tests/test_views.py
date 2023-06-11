@@ -178,7 +178,7 @@ def test_destroy_user_authenticated(api_client, test_user):
         format="json",
     )
     assert response.status_code == 204
-    assert response.data["message"] == "ユーザーを削除しました"
+    assert response.data["message"] == "退会しました"
 
     # test_userが削除されているか検証
     assert not User.objects.filter(pk=test_user.id).exists()
@@ -204,7 +204,7 @@ def test_destroy_other_user(api_client, test_users):
         format="json",
     )
     assert response.status_code == 403
-    assert response.data["message"] == "ユーザーの削除に失敗しました"
+    assert response.data["message"] == "退会に失敗しました"
 
     # test_users[1]が削除されていないか検証
     assert User.objects.filter(pk=test_users[1].id).exists()

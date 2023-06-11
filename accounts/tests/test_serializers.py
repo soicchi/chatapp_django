@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
-from accounts.serializers import LoginSerializer, SignUpSerializer, UserUpdateSerializer
+from accounts.serializers import SignUpSerializer, UserUpdateSerializer
 
 TOO_LONG_NAME_ERROR_MESSAGE = "ユーザー名は255文字以内で入力してください"
 BLANK_NAME_ERROR_MESSAGE = "ユーザー名が空です"
@@ -207,55 +207,6 @@ def test_include_token_in_response():
     response = serializer.to_representation(new_user)
     assert "refresh_token" in response
     assert "access_token" in response
-
-
-@pytest.mark.django_db
-def test_login_user():
-    # ログインのためのユーザーを作成
-    User = get_user_model()
-    user = User.objects.create_user(name="test_user", email="test@test.com", password="password")
-
-    # テストユーザーの情報を入力
-    authenticated_data = {
-        "email": "test@test.com",
-        "password": "password",
-    }
-    serializer = LoginSerializer(data=authenticated_data)
-    assert serializer.is_valid()
-
-
-@pytest.mark.django_db
-def test_login_with_invalid_email():
-    # ログインのためのユーザーを作成
-    User = get_user_model()
-    user = User.objects.create_user(name="test_user", email="test@test.com", password="password")
-
-    # 間違ったメールアドレスを入力
-    unauthenticated_data = {
-        "email": "invalid@test.com",
-        "password": "password",
-    }
-    serializer = LoginSerializer(data=unauthenticated_data)
-
-    with pytest.raises(ValidationError, match=INVALID_LOGIN_ERROR_MESSAGE):
-        serializer.is_valid(raise_exception=True)
-
-
-@pytest.mark.django_db
-def test_login_with_invalid_password():
-    # ログインのためのユーザーを作成
-    User = get_user_model()
-    user = User.objects.create_user(name="test_user", email="test@test.com", password="password")
-
-    # 間違ったパスワードを入力
-    unauthenticated_data = {
-        "email": "test@test.com",
-        "password": "invalidpassword",
-    }
-    serializer = LoginSerializer(data=unauthenticated_data)
-
-    with pytest.raises(ValidationError, match=INVALID_LOGIN_ERROR_MESSAGE):
-        serializer.is_valid(raise_exception=True)
 
 
 @pytest.mark.django_db

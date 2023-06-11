@@ -1,11 +1,9 @@
-from django.contrib.auth import authenticate
-
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .fields import CustomNameField, CustomEmailField, CustomPasswordField
 from utils.validations import EmailValidation, PasswordValidation, UserNameValidation
 
+from .fields import CustomEmailField, CustomNameField, CustomPasswordField
 from .models import CustomUser
 
 

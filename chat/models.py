@@ -4,13 +4,17 @@ from accounts.models import CustomUser
 
 
 class Room(models.Model):
-    name = models.CharField(verbose_name="ルーム名", max_length=255, blank=False, null=False)
-    created_at = models.DateTimeField(verbose_name="作成日時", auto_now=True, null=False, blank=False)
-    admin_user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name="admin_rooms")
+    name = models.CharField(
+        verbose_name="ルーム名", max_length=255, blank=False, null=False
+    )
+    created_at = models.DateTimeField(
+        verbose_name="作成日時", auto_now=True, null=False, blank=False
+    )
+    admin_user = models.ForeignKey(
+        CustomUser, on_delete=models.PROTECT, related_name="admin_rooms"
+    )
     users = models.ManyToManyField(
-        CustomUser,
-        through="RoomMember",
-        through_fields=("room", "user")
+        CustomUser, through="RoomMember", through_fields=("room", "user")
     )
 
     class Meta:
@@ -22,7 +26,9 @@ class Room(models.Model):
 
 
 class RoomMember(models.Model):
-    entry_datetime = models.DateTimeField(verbose_name="入室日", auto_now=True, null=False, blank=False)
+    entry_datetime = models.DateTimeField(
+        verbose_name="入室日", auto_now=True, null=False, blank=False
+    )
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
