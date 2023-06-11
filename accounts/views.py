@@ -37,10 +37,10 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             return super().get_serializer_class()
 
-    def destroy(self, request: dict, *args, **kwargs) -> None:
+    def destroy(self, request: dict, *args, **kwargs) -> Response:
         target_user = self.get_object()
         if request.user != target_user:
-            return Response(data={"message": "ユーザーの削除に失敗しました"}, status=403)
+            return Response(data={"message": "退会に失敗しました"}, status=403)
         self.get_serializer().destroy(target_user)
 
-        return Response(data={"message": "ユーザーを削除しました"}, status=204)
+        return Response(data={"message": "退会しました"}, status=204)
