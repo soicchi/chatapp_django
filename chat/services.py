@@ -27,10 +27,6 @@ class RoomMembershipService:
 
         Args:
             admin_user_id (int): 現在の管理者ユーザーのID
-
-        Raises:
-            ValueError: 入力されたadmin_user_idが管理者ユーザーIDではない場合
-            ValueError: 管理者ユーザー以外にユーザーが存在しない場合
         """
 
         new_admin_user = self._select_admin_user(admin_user_id)
