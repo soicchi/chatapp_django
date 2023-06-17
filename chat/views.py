@@ -27,7 +27,12 @@ class LeaveRoomAPIView(views.APIView):
     def post(self, request, *args, **kwargs) -> Response:
         serializer = LeaveRoomSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.destroy(serializer.validated_data)
+        try:
+            serializer.destroy(serializer.validated_data)
+        except ValueError as e:
+            return Response({
+                "message": str(e),
+            }, status=400)
 
         return Response({
             "message": "チャットルームを退出しました",

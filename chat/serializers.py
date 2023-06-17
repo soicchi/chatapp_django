@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .fields import CustomNameField
 from .models import Room, RoomMember
+from .services import RoomManagerService, RoomMembershipService
 
 
 class CreateRoomSerializer(serializers.ModelSerializer):
@@ -16,12 +17,9 @@ class CreateRoomSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict) -> Room:
         room_name = validated_data["name"]
         admin_user = validated_data["admin_user"]
-        room = Room.objects.create(name=room_name, admin_user=admin_user)
+        room_manager = RoomManagerService()
 
-        # 管理者をチャットルームのメンバーとして追加
-        room.users.add(admin_user)
-
-        return room
+        return room_manager.create_room(room_name=room_name, admin_user=admin_user)
 
 
 class LeaveRoomSerializer(serializers.Serializer):
@@ -35,14 +33,17 @@ class LeaveRoomSerializer(serializers.Serializer):
         room_id = data["room_id"]
 
         # 該当するRoomMemberレコードの存在を検証
-        room_member = RoomMember.objects.filter(user_id=user_id, room_id=room_id).first()
-        if room_member is None:
-            raise serializers.ValidationError("指定したユーザーがチャットルームのメンバーに存在しません")
+        try:
+            RoomMember.fetch_room_member(user_id=user_id, room_id=room_id)
+        except ValueError:
+            raise serializers.ValidationError("指定されたユーザーIDとルームIDの組み合わせが見つかりません")
 
         return data
 
     def destroy(self, validated_data: dict) -> None:
         user_id = validated_data["user_id"]
         room_id = validated_data["room_id"]
-        room_member = RoomMember.objects.filter(user_id=user_id, room_id=room_id).first()
-        room_member.delete()
+
+        target_room = Room.fetch_room(room_id)
+        room_membership = RoomMembershipService(target_room)
+        room_membership.leave_room(user_id)

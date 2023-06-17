@@ -24,6 +24,37 @@ class Room(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    @classmethod
+    def fetch_room(cls, room_id: int) -> "Room":
+        """チャットルームを取得
+
+        Raises:
+            ValueError: チャットルームが見つからない場合
+
+        Returns:
+            Room: チャットルームオブジェクト
+        """
+
+        room = cls.objects.filter(pk=room_id).first()
+        if not room:
+            raise ValueError(f"チャットルームが見つかりません。room_id: {room_id}")
+
+        return room
+
+    @classmethod
+    def create_room(cls, name: str, user: CustomUser) -> "Room":
+        """チャットルームを作成
+
+        Args:
+            name (str): チャットルーム名
+            user (CustomUser): 管理ユーザーとして登録するユーザーオブジェクト
+
+        Returns:
+            Room: Roomオブジェクト
+        """
+
+        return Room.objects.create(name=name, admin_user=user)
+
 
 class RoomMember(models.Model):
     entry_datetime = models.DateTimeField(
@@ -34,3 +65,43 @@ class RoomMember(models.Model):
 
     class Meta:
         db_table = "room_member"
+
+    @classmethod
+    def fetch_room_member(cls, user_id: int, room_id: int) -> "RoomMember":
+        """RoomMemberオブジェクトを取得
+
+        Args:
+            user_id (int): ユーザーID
+
+        Raises:
+            ValueError: RoomMemberが見つからない場合
+
+        Returns:
+            RoomMember: RoomMemberオブジェクト
+        """
+
+        room_member = cls.objects.filter(user_id=user_id, room_id=room_id).first()
+        if not room_member:
+            raise ValueError(f"RoomMemberが見つかりません。room_id: {room_id}, user_id: {user_id}")
+
+        return room_member
+
+    @classmethod
+    def fetch_room_members(cls, room_id: int) -> list["RoomMember"]:
+        """複数のRoomMemberオブジェクトを取得
+
+        Args:
+            user_id (int): ユーザーID
+
+        Raises:
+            ValueError: RoomMemberが見つからない場合
+
+        Returns:
+            RoomMember: 複数のRoomMemberオブジェクト
+        """
+
+        room_members = cls.objects.filter(room_id=room_id)
+        if not room_members.exists():
+            raise ValueError(f"RoomMemberが見つかりません。room_id: {room_id}")
+
+        return room_members
