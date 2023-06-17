@@ -74,11 +74,11 @@ class RoomMembershipService:
             user_id (int): 退出するユーザーID
         """
 
-        if self.room.admin_user.id == user_id:
+        room_members = RoomMember.fetch_room_members(room_id=self.room.id)
+        if self.room.admin_user.id == user_id and room_members.count() > 1:
             self.assign_new_admin(user_id)
 
-        room_member = RoomMember.fetch_room_member(user_id=user_id, room_id=self.room.id)
-        room_member.delete()
+        room_members.filter(user_id=user_id).delete()
 
         # チャットルームにユーザーが残っていない場合、チャットルームも削除
         if self.room.users.count() == 0:
