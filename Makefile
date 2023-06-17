@@ -28,7 +28,7 @@ shell:
 	docker compose run --rm api python manage.py shell
 
 test:
-	docker compose run --rm api pytest -v
+	docker compose run --rm api pytest -v ${file}
 
 update_lock:
 	docker compose run --rm api poetry lock
@@ -41,9 +41,6 @@ isort:
 
 flake8:
 	docker compose run --rm api flake8
-
-pytest:
-	docker compose run --rm api pytest ${file}
 
 mypy:
 	docker compose run --rm api mypy .
