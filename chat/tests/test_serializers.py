@@ -83,4 +83,4 @@ def test_validate_leave_room():
 
     with pytest.raises(ValidationError):
         serializer.is_valid(raise_exception=True)
-        str(serializer.errors) == "指定されたユーザーIDとルームIDの組み合わせが見つかりません"
+        assert "指定されたユーザーIDとルームIDの組み合わせが見つかりません" in str(ValidationError)
