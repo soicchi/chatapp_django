@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
-    "chat_rooms.apps.ChatRoomConfig",
+    "chat_rooms.apps.ChatRoomsConfig",
     "posts.apps.PostsConfig",
     "rest_framework",
     "rest_framework_simplejwt",
