@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import QuerySet
 
 from accounts.models import CustomUser
 
@@ -82,12 +83,14 @@ class RoomMember(models.Model):
 
         room_member = cls.objects.filter(user_id=user_id, room_id=room_id).first()
         if not room_member:
-            raise ValueError(f"RoomMemberが見つかりません。room_id: {room_id}, user_id: {user_id}")
+            raise ValueError(
+                f"RoomMemberが見つかりません。room_id: {room_id}, user_id: {user_id}"
+            )
 
         return room_member
 
     @classmethod
-    def fetch_room_members(cls, room_id: int) -> list["RoomMember"]:
+    def fetch_room_members(cls, room_id: int) -> QuerySet["RoomMember"]:
         """複数のRoomMemberオブジェクトを取得
 
         Args:

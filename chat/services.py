@@ -1,4 +1,5 @@
 from django.db import transaction
+
 from .models import CustomUser, Room, RoomMember
 
 
@@ -48,7 +49,11 @@ class RoomMembershipService:
         room_members = RoomMember.fetch_room_members(room_id=self.room.id)
 
         # 現在の管理ユーザーを除いたユーザーの中で最も入室日が古いレコードを取得
-        oldest_entry = room_members.exclude(user_id=admin_user_id).order_by("entry_datetime").first()
+        oldest_entry = (
+            room_members.exclude(user_id=admin_user_id)
+            .order_by("entry_datetime")
+            .first()
+        )
         if not oldest_entry:
             raise ValueError(f"チャットルームにユーザーが存在しません。room_id: {self.room.id}")
 

@@ -53,7 +53,7 @@ def test_leave_room_success(api_client, test_user):
 
     # チャットルームに該当ユーザーが含まれていないか検証
     room.refresh_from_db()
-    assert not test_user in room.users.all()
+    assert test_user not in room.users.all()
 
 
 @pytest.mark.django_db

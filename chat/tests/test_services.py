@@ -14,7 +14,7 @@ def test_create_room():
         email="test@test.com",
         password="password",
     )
-    room =RoomManagerService.create_room(
+    room = RoomManagerService.create_room(
         room_name="test_room",
         admin_user=user,
     )
@@ -165,4 +165,4 @@ def test_leave_room_with_multiple_users():
     room_membership = RoomMembershipService(room)
     room_membership.leave_room(user_id=user1.id)
     assert room.admin_user == user2
-    assert not user1 in room.users.all()
+    assert user1 not in room.users.all()

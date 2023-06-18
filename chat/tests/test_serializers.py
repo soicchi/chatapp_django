@@ -2,8 +2,8 @@ import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
-from chat.serializers import CreateRoomSerializer, LeaveRoomSerializer
 from chat.models import Room, RoomMember
+from chat.serializers import CreateRoomSerializer, LeaveRoomSerializer
 
 BLANK_NAME_ERROR_MESSAGE = "チャットルーム名が空です"
 
@@ -13,9 +13,7 @@ def test_create_room():
     # テストユーザー作成
     User = get_user_model()
     user = User.objects.create_user(
-        name="test_user",
-        email="test@test.com",
-        password="password"
+        name="test_user", email="test@test.com", password="password"
     )
 
     input_data = {"name": "test_room", "admin_user": user.id}
@@ -34,9 +32,7 @@ def test_leave_room():
     # テストユーザー作成
     User = get_user_model()
     user = User.objects.create_user(
-        name="test_user",
-        email="test@test.com",
-        password="password"
+        name="test_user", email="test@test.com", password="password"
     )
 
     # テストルームを作成

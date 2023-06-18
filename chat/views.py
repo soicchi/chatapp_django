@@ -2,7 +2,7 @@ from rest_framework import serializers, views, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Room, RoomMember
+from .models import Room
 from .serializers import CreateRoomSerializer, LeaveRoomSerializer
 
 
@@ -30,10 +30,16 @@ class LeaveRoomAPIView(views.APIView):
         try:
             serializer.destroy(serializer.validated_data)
         except ValueError as e:
-            return Response({
-                "message": str(e),
-            }, status=400)
+            return Response(
+                {
+                    "message": str(e),
+                },
+                status=400,
+            )
 
-        return Response({
-            "message": "チャットルームを退出しました",
-        }, status=204)
+        return Response(
+            {
+                "message": "チャットルームを退出しました",
+            },
+            status=204,
+        )

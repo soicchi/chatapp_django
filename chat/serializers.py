@@ -18,7 +18,9 @@ class CreateRoomSerializer(serializers.ModelSerializer):
         room_name = validated_data["name"]
         admin_user = validated_data["admin_user"]
 
-        return RoomManagerService.create_room(room_name=room_name, admin_user=admin_user)
+        return RoomManagerService.create_room(
+            room_name=room_name, admin_user=admin_user
+        )
 
 
 class LeaveRoomSerializer(serializers.Serializer):

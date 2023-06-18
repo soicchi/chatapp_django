@@ -78,7 +78,7 @@ def test_fetch_room_member():
 def test_fetch_room_members():
     # テストユーザー作成
     User = get_user_model()
-    user1= User.objects.create_user(
+    user1 = User.objects.create_user(
         name="test_user1",
         email="test1@test.com",
         password="password",
