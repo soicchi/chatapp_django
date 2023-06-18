@@ -64,3 +64,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    @classmethod
+    def fetch_user(cls, user_id: int) -> "CustomUser":
+        user = cls.objects.filter(pk=user_id).first()
+        if not user:
+            raise ValueError("指定されたユーザーIDのユーザーは存在しません")
+
+        return user
