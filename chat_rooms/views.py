@@ -3,7 +3,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Room
-from .serializers import CreateRoomSerializer, JoinRoomSerializer, LeaveRoomSerializer
+from .serializers import (
+    CreateRoomSerializer,
+    JoinRoomSerializer,
+    LeaveRoomSerializer,
+    RoomListSerializer,
+    RoomRetrieveSerializer,
+)
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -15,6 +21,10 @@ class RoomViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> serializers.Serializer:
         if self.action == "create":
             return CreateRoomSerializer
+        elif self.action == "list":
+            return RoomListSerializer
+        elif self.action == "retrieve":
+            return RoomRetrieveSerializer
 
 
 class JoinRoomAPIView(views.APIView):

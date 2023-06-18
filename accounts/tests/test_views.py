@@ -6,7 +6,7 @@ from rest_framework.test import APIClient
 from accounts.serializers import UserListSerializer, UserRetrieveSerializer
 
 User = get_user_model()
-base_users_uri_name = "users"
+BASE_USERS_URI_NAME = "users"
 
 
 @pytest.fixture
@@ -85,7 +85,7 @@ def test_sign_up_with_missing_password(api_client):
 def test_fetch_user_list_authenticated(api_client, test_users):
     # test_users[0]で認証
     api_client.force_authenticate(user=test_users[0])
-    response = api_client.get(reverse(f"accounts:{base_users_uri_name}-list"))
+    response = api_client.get(reverse(f"accounts:{BASE_USERS_URI_NAME}-list"))
     assert response.status_code == 200
 
     # レスポンスに含まれるユーザーリストが正しいか検証
@@ -94,7 +94,7 @@ def test_fetch_user_list_authenticated(api_client, test_users):
 
 @pytest.mark.django_db
 def test_fetch_user_list_unauthenticated(api_client):
-    response = api_client.get(reverse(f"accounts:{base_users_uri_name}-list"))
+    response = api_client.get(reverse(f"accounts:{BASE_USERS_URI_NAME}-list"))
     assert response.status_code == 401
 
 
@@ -103,7 +103,7 @@ def test_fetch_user_detail_authenticated(api_client, test_user):
     # test_userで認証
     api_client.force_authenticate(user=test_user)
     response = api_client.get(
-        reverse(f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_user.id})
+        reverse(f"accounts:{BASE_USERS_URI_NAME}-detail", kwargs={"pk": test_user.id})
     )
     assert response.status_code == 200
 
@@ -114,7 +114,7 @@ def test_fetch_user_detail_authenticated(api_client, test_user):
 @pytest.mark.django_db
 def test_fetch_user_detail_unauthenticated(api_client, test_user):
     response = api_client.get(
-        reverse(f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_user.id})
+        reverse(f"accounts:{BASE_USERS_URI_NAME}-detail", kwargs={"pk": test_user.id})
     )
     assert response.status_code == 401
 
@@ -126,7 +126,7 @@ def test_fetch_user_detail_not_found(api_client, test_user):
     not_existed_user_id = test_user.id + 1
     response = api_client.get(
         reverse(
-            f"accounts:{base_users_uri_name}-detail", kwargs={"pk": not_existed_user_id}
+            f"accounts:{BASE_USERS_URI_NAME}-detail", kwargs={"pk": not_existed_user_id}
         )
     )
     assert response.status_code == 404
@@ -141,7 +141,7 @@ def test_update_user_authenticated(api_client, test_user):
         "email": "updated@test.com",
     }
     response = api_client.patch(
-        reverse(f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_user.id}),
+        reverse(f"accounts:{BASE_USERS_URI_NAME}-detail", kwargs={"pk": test_user.id}),
         data=update_data,
         format="json",
     )
@@ -162,7 +162,7 @@ def test_update_user_unauthenticated(api_client, test_user):
         "email": "updated@test.com",
     }
     response = api_client.patch(
-        reverse(f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_user.id}),
+        reverse(f"accounts:{BASE_USERS_URI_NAME}-detail", kwargs={"pk": test_user.id}),
         data=update_data,
         format="json",
     )
@@ -174,7 +174,7 @@ def test_destroy_user_authenticated(api_client, test_user):
     # test_userで認証
     api_client.force_authenticate(user=test_user)
     response = api_client.delete(
-        reverse(f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_user.id}),
+        reverse(f"accounts:{BASE_USERS_URI_NAME}-detail", kwargs={"pk": test_user.id}),
         format="json",
     )
     assert response.status_code == 204
@@ -187,7 +187,7 @@ def test_destroy_user_authenticated(api_client, test_user):
 @pytest.mark.django_db
 def test_destroy_user_unauthenticated(api_client, test_user):
     response = api_client.delete(
-        reverse(f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_user.id}),
+        reverse(f"accounts:{BASE_USERS_URI_NAME}-detail", kwargs={"pk": test_user.id}),
         format="json",
     )
     assert response.status_code == 401
@@ -199,7 +199,7 @@ def test_destroy_other_user(api_client, test_users):
     api_client.force_authenticate(test_users[0])
     response = api_client.delete(
         reverse(
-            f"accounts:{base_users_uri_name}-detail", kwargs={"pk": test_users[1].id}
+            f"accounts:{BASE_USERS_URI_NAME}-detail", kwargs={"pk": test_users[1].id}
         ),
         format="json",
     )

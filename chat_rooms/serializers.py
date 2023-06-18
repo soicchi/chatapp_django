@@ -14,7 +14,7 @@ class CreateRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ["name", "admin_user"]
+        fields = ["id", "name", "admin_user"]
 
     def create(self, validated_data: dict) -> Room:
         room_name = validated_data["name"]
@@ -23,6 +23,22 @@ class CreateRoomSerializer(serializers.ModelSerializer):
         return RoomManagerService.create_room(
             room_name=room_name, admin_user=admin_user
         )
+
+
+class RoomListSerializer(serializers.ModelSerializer):
+    """チャットルーム一覧"""
+
+    class Meta:
+        model = Room
+        fields = ["id", "name", "admin_user"]
+
+
+class RoomRetrieveSerializer(serializers.ModelSerializer):
+    """チャットルーム詳細"""
+
+    class Meta:
+        model = Room
+        fields = ["id", "name", "admin_user"]
 
 
 class JoinRoomSerializer(serializers.Serializer):
