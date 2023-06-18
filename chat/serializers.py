@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .fields import CustomNameField
 from .models import Room, RoomMember
 from .services import RoomManagerService, RoomMembershipService
+from accounts.models import CustomUser
 
 
 class CreateRoomSerializer(serializers.ModelSerializer):
@@ -21,6 +22,37 @@ class CreateRoomSerializer(serializers.ModelSerializer):
         return RoomManagerService.create_room(
             room_name=room_name, admin_user=admin_user
         )
+
+
+class JoinRoomSerializer(serializers.Serializer):
+    """チャットルームに参加"""
+
+    user_id = serializers.IntegerField()
+    room_id = serializers.IntegerField()
+
+    def validate_user_id(self, user_id: int) -> int:
+        try:
+            CustomUser.fetch_user(user_id)
+        except ValueError:
+            raise serializers.ValidationError("指定されたユーザーIDが見つかりません")
+
+        return user_id
+
+    def validate_room_id(self, room_id: int) -> int:
+        try:
+            Room.fetch_room(room_id)
+        except ValueError:
+            raise serializers.ValidationError("指定されたルームIDが見つかりません")
+
+        return room_id
+
+    def create(self, validated_data: dict) -> None:
+        user_id = validated_data["user_id"]
+        room_id = validated_data["room_id"]
+
+        target_room = Room.fetch_room(room_id)
+        room_membership = RoomMembershipService(target_room)
+        room_membership.join_room(user_id)
 
 
 class LeaveRoomSerializer(serializers.Serializer):
