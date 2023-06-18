@@ -12,7 +12,8 @@ class RoomManagerService:
         room = Room.create_room(name=room_name, user=admin_user)
 
         # チャットルームのメンバーとしても管理ユーザーを追加
-        room.users.add(admin_user)
+        room_membership = RoomMembershipService(room)
+        room_membership.join_room(admin_user.id)
 
         return room
 
@@ -71,6 +72,15 @@ class RoomMembershipService:
 
         self.room.admin_user = new_admin_user
         self.room.save()
+
+    def join_room(self, user_id: int) -> None:
+        """チャットルームに参加
+
+        Args:
+            user_id (int): 参加するユーザーID
+        """
+
+        self.room.users.add(user_id)
 
     def leave_room(self, user_id: int) -> None:
         """チャットルームを退出

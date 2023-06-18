@@ -166,3 +166,33 @@ def test_leave_room_with_multiple_users():
     room_membership.leave_room(user_id=user1.id)
     assert room.admin_user == user2
     assert user1 not in room.users.all()
+
+
+@pytest.mark.django_db
+def test_join_room():
+    # テストユーザー作成
+    User = get_user_model()
+    user1 = User.objects.create_user(
+        name="test_user1",
+        email="test1@test.com",
+        password="password",
+    )
+    user2 = User.objects.create_user(
+        name="test_user2",
+        email="test2@test.com",
+        password="password",
+    )
+
+    # テストルーム作成
+    room = RoomManagerService.create_room(
+        room_name="test_room",
+        admin_user=user1,
+    )
+    RoomMember.objects.create(
+        user=user1,
+        room=room,
+    )
+
+    room_membership = RoomMembershipService(room)
+    room_membership.join_room(user2.id)
+    assert user2 in room.users.all()
