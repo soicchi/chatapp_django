@@ -1,8 +1,8 @@
 import pytest
 from django.contrib.auth import get_user_model
 
-from chat.models import Room, RoomMember
-from chat.services import RoomManagerService
+from chat_rooms.models import Room, RoomMember
+from chat_rooms.services import RoomManagerService
 
 
 @pytest.mark.django_db

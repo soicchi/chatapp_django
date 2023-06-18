@@ -7,7 +7,7 @@ router = routers.SimpleRouter()
 router.register("rooms", RoomViewSet, basename="rooms")
 
 
-app_name = "chat"
+app_name = "chat_rooms"
 urlpatterns = [
     path("", include(router.urls)),
     path("join/", JoinRoomAPIView.as_view(), name="join_room"),

@@ -5,12 +5,10 @@ from accounts.models import CustomUser
 
 
 class Room(models.Model):
-    name = models.CharField(
-        verbose_name="ルーム名", max_length=255, blank=False, null=False
-    )
-    created_at = models.DateTimeField(
-        verbose_name="作成日時", auto_now=True, null=False, blank=False
-    )
+    """チャットルームを管理"""
+
+    name = models.CharField(verbose_name="ルーム名", max_length=255)
+    created_at = models.DateTimeField(verbose_name="作成日時", auto_now_add=True)
     admin_user = models.ForeignKey(
         CustomUser, on_delete=models.PROTECT, related_name="admin_rooms"
     )
@@ -58,9 +56,9 @@ class Room(models.Model):
 
 
 class RoomMember(models.Model):
-    entry_datetime = models.DateTimeField(
-        verbose_name="入室日", auto_now=True, null=False, blank=False
-    )
+    """チャットルームとユーザーのリレーションを管理"""
+
+    entry_datetime = models.DateTimeField(verbose_name="入室日", auto_now_add=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
