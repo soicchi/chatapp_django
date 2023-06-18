@@ -225,3 +225,6 @@ SIMPLE_JWT = {
 
 # environment settings
 ENVIRONMENT = os.getenv("ENVIRONMENT")
+
+# update settings
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
