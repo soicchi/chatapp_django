@@ -29,9 +29,12 @@ class JoinRoomAPIView(views.APIView):
         serializer.is_valid(raise_exception=True)
         serializer.create(serializer.validated_data)
 
-        return Response({
-            "message": "チャットルームに参加しました",
-        }, status=201)
+        return Response(
+            {
+                "message": "チャットルームに参加しました",
+            },
+            status=201,
+        )
 
 
 class LeaveRoomAPIView(views.APIView):

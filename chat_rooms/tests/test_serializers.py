@@ -3,7 +3,11 @@ from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
 from chat_rooms.models import Room, RoomMember
-from chat_rooms.serializers import CreateRoomSerializer, JoinRoomSerializer, LeaveRoomSerializer
+from chat_rooms.serializers import (
+    CreateRoomSerializer,
+    JoinRoomSerializer,
+    LeaveRoomSerializer,
+)
 
 BLANK_NAME_ERROR_MESSAGE = "チャットルーム名が空です"
 

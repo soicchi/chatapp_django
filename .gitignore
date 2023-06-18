@@ -8,3 +8,6 @@ mysql
 **__pycache__**
 .mypy_cache
 .pytest_cache
+
+# image files
+images

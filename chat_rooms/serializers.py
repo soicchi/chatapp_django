@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from accounts.models import CustomUser
+
 from .fields import CustomNameField
 from .models import Room, RoomMember
 from .services import RoomManagerService, RoomMembershipService
-from accounts.models import CustomUser
 
 
 class CreateRoomSerializer(serializers.ModelSerializer):

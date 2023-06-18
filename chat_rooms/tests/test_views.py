@@ -47,7 +47,9 @@ def test_leave_room_success(api_client, test_user):
 
     # ユーザー認証を通す
     api_client.force_authenticate(user=test_user)
-    response = api_client.post(reverse("chat_rooms:leave_room"), input_data, format="json")
+    response = api_client.post(
+        reverse("chat_rooms:leave_room"), input_data, format="json"
+    )
     assert response.status_code == 204
     assert response.data["message"] == "チャットルームを退出しました"
 
@@ -71,7 +73,9 @@ def test_leave_room_failure(api_client, test_user):
 
     # ユーザーの認証を通す
     api_client.force_authenticate(user=test_user)
-    response = api_client.post(reverse("chat_rooms:leave_room"), input_data, format="json")
+    response = api_client.post(
+        reverse("chat_rooms:leave_room"), input_data, format="json"
+    )
     assert response.status_code == 400
 
 
@@ -89,7 +93,9 @@ def test_leave_room_unauthenticated(api_client, test_user):
     }
 
     # ユーザー認証を通す
-    response = api_client.post(reverse("chat_rooms:leave_room"), input_data, format="json")
+    response = api_client.post(
+        reverse("chat_rooms:leave_room"), input_data, format="json"
+    )
     assert response.status_code == 401
 
 
@@ -112,7 +118,9 @@ def test_join_room_authenticated(api_client, test_user):
         "user_id": test_user2.id,
         "room_id": room.id,
     }
-    response = api_client.post(reverse("chat_rooms:join_room"), input_data, format="json")
+    response = api_client.post(
+        reverse("chat_rooms:join_room"), input_data, format="json"
+    )
     assert response.status_code == 201
     assert response.data["message"] == "チャットルームに参加しました"
 
@@ -135,7 +143,9 @@ def test_join_room_unauthenticated(api_client, test_user):
         "user_id": test_user2.id,
         "room_id": room.id,
     }
-    response = api_client.post(reverse("chat_rooms:join_room"), input_data, format="json")
+    response = api_client.post(
+        reverse("chat_rooms:join_room"), input_data, format="json"
+    )
     assert response.status_code == 401
 
 
@@ -160,5 +170,7 @@ def test_join_room_failure(api_client, test_user):
         "user_id": test_user2.id,
         "room_id": room.id + 1,
     }
-    response = api_client.post(reverse("chat_rooms:join_room"), input_data, format="json")
+    response = api_client.post(
+        reverse("chat_rooms:join_room"), input_data, format="json"
+    )
     assert response.status_code == 400
