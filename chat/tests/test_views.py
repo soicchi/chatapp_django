@@ -91,3 +91,74 @@ def test_leave_room_unauthenticated(api_client, test_user):
     # ユーザー認証を通す
     response = api_client.post(reverse("chat:leave_room"), input_data, format="json")
     assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_join_room_authenticated(api_client, test_user):
+    # テストユーザー作成
+    User = get_user_model()
+    test_user2 = User.objects.create_user(
+        name="test_user2",
+        email="test2@test.com",
+        password="password",
+    )
+
+    # テストルームを作成
+    room = Room.objects.create(name="test_room", admin_user=test_user)
+    RoomMember.objects.create(user_id=test_user.id, room_id=room.id)
+
+    api_client.force_authenticate(user=test_user2)
+    input_data = {
+        "user_id": test_user2.id,
+        "room_id": room.id,
+    }
+    response = api_client.post(reverse("chat:join_room"), input_data, format="json")
+    assert response.status_code == 201
+    assert response.data["message"] == "チャットルームに参加しました"
+
+
+@pytest.mark.django_db
+def test_join_room_unauthenticated(api_client, test_user):
+    # テストユーザー作成
+    User = get_user_model()
+    test_user2 = User.objects.create_user(
+        name="test_user2",
+        email="test2@test.com",
+        password="password",
+    )
+
+    # テストルームを作成
+    room = Room.objects.create(name="test_room", admin_user=test_user)
+    RoomMember.objects.create(user_id=test_user.id, room_id=room.id)
+
+    input_data = {
+        "user_id": test_user2.id,
+        "room_id": room.id,
+    }
+    response = api_client.post(reverse("chat:join_room"), input_data, format="json")
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_join_room_failure(api_client, test_user):
+    # テストユーザー作成
+    User = get_user_model()
+    test_user2 = User.objects.create_user(
+        name="test_user2",
+        email="test2@test.com",
+        password="password",
+    )
+
+    # テストルームを作成
+    room = Room.objects.create(name="test_room", admin_user=test_user)
+    RoomMember.objects.create(user_id=test_user.id, room_id=room.id)
+
+    api_client.force_authenticate(user=test_user2)
+
+    # 存在しないルームIDを指定
+    input_data = {
+        "user_id": test_user2.id,
+        "room_id": room.id + 1,
+    }
+    response = api_client.post(reverse("chat:join_room"), input_data, format="json")
+    assert response.status_code == 400

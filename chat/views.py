@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Room
-from .serializers import CreateRoomSerializer, LeaveRoomSerializer
+from .serializers import CreateRoomSerializer, JoinRoomSerializer, LeaveRoomSerializer
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -17,6 +17,23 @@ class RoomViewSet(viewsets.ModelViewSet):
             return CreateRoomSerializer
 
 
+class JoinRoomAPIView(views.APIView):
+    """チャットルームに参加するクラス"""
+
+    queryset = Room.objects.all()
+    serializers_class = JoinRoomSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs) -> Response:
+        serializer = JoinRoomSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.create(serializer.validated_data)
+
+        return Response({
+            "message": "チャットルームに参加しました",
+        }, status=201)
+
+
 class LeaveRoomAPIView(views.APIView):
     """チャットルームを退出するクラス"""
 
@@ -27,15 +44,7 @@ class LeaveRoomAPIView(views.APIView):
     def post(self, request, *args, **kwargs) -> Response:
         serializer = LeaveRoomSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            serializer.destroy(serializer.validated_data)
-        except ValueError as e:
-            return Response(
-                {
-                    "message": str(e),
-                },
-                status=400,
-            )
+        serializer.destroy(serializer.validated_data)
 
         return Response(
             {
