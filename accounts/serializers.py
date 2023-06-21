@@ -5,6 +5,7 @@ from utils.validations import EmailValidation, PasswordValidation, UserNameValid
 
 from .fields import CustomEmailField, CustomNameField, CustomPasswordField
 from .models import CustomUser
+from .services import UserManagerService
 
 
 class SignUpSerializer(serializers.ModelSerializer):
@@ -19,7 +20,8 @@ class SignUpSerializer(serializers.ModelSerializer):
         fields = ["name", "email", "password"]
 
     def create(self, validated_data: dict) -> CustomUser:
-        new_user = CustomUser.objects.create_user(
+        user_manager = UserManagerService()
+        new_user = user_manager.create_user(
             name=validated_data["name"],
             email=validated_data["email"],
             password=validated_data["password"],
