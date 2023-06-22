@@ -27,10 +27,7 @@ def test_user():
 
 @pytest.mark.django_db
 def test_create_room_success(api_client, test_user):
-    input_data = {
-        "name": "test_room",
-        "admin_user": test_user.id,
-    }
+    input_data = {"name": "test_room"}
 
     # ユーザー認証を通す
     api_client.force_authenticate(user=test_user)
@@ -39,15 +36,11 @@ def test_create_room_success(api_client, test_user):
     )
     assert response.status_code == 201
     assert response.data["name"] == "test_room"
-    assert response.data["admin_user"] == test_user.id
 
 
 @pytest.mark.django_db
 def test_create_room_unauthenticated(api_client, test_user):
-    input_data = {
-        "name": "test_room",
-        "admin_user": test_user.id,
-    }
+    input_data = {"name": "test_room"}
     response = api_client.post(
         reverse(f"chat_rooms:{BASE_ROOMS_URI_NAME}-list"), input_data, format="json"
     )

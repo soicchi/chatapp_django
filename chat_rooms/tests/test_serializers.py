@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.auth import get_user_model
+from django.test import RequestFactory
 from rest_framework.exceptions import ValidationError
 
 from chat_rooms.models import Room, RoomMember
@@ -19,9 +20,11 @@ def test_create_room():
     user = User.objects.create_user(
         name="test_user", email="test@test.com", password="password"
     )
+    request = RequestFactory().post("/api/v1/rooms/")
+    request.user = user
 
-    input_data = {"name": "test_room", "admin_user": user.id}
-    serializer = CreateRoomSerializer(data=input_data)
+    input_data = {"name": "test_room"}
+    serializer = CreateRoomSerializer(data=input_data, context={"request": request})
     assert serializer.is_valid()
 
     # インスタンス生成
@@ -97,7 +100,7 @@ def test_join_room_validate_user_id():
     )
 
     # テストルーム作成
-    room = Room.create_room(name="test_room", user=user)
+    room = Room.objects.create(name="test_room", admin_user=user)
 
     input_data = {
         "user_id": user.id + 1,
@@ -120,7 +123,7 @@ def test_join_room_validate_room_id():
     )
 
     # テストルーム作成
-    room = Room.create_room(name="test_room", user=user)
+    room = Room.objects.create(name="test_room", admin_user=user)
 
     input_data = {
         "user_id": user.id,
@@ -148,7 +151,7 @@ def test_join_room():
     )
 
     # テストルーム作成
-    room = Room.create_room(name="test_room", user=user1)
+    room = Room.objects.create(name="test_room", admin_user=user1)
 
     input_data = {
         "user_id": user2.id,

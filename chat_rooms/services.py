@@ -6,10 +6,12 @@ from .models import CustomUser, Room, RoomMember
 class RoomManagerService:
     """Roomの作成、削除、更新などの基本的な操作を行うクラス"""
 
-    @staticmethod
+    def __init__(self, room_model=Room) -> None:
+        self.room_model = room_model
+
     @transaction.atomic
-    def create_room(room_name: str, admin_user: CustomUser) -> Room:
-        room = Room.create_room(name=room_name, user=admin_user)
+    def create_room(self, room_name: str, admin_user: CustomUser) -> Room:
+        room = self.room_model.create_room(name=room_name, user=admin_user)
 
         # チャットルームのメンバーとしても管理ユーザーを追加
         room_membership = RoomMembershipService(room)

@@ -14,13 +14,15 @@ class CreateRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ["id", "name", "admin_user"]
+        fields = ["id", "name"]
 
     def create(self, validated_data: dict) -> Room:
         room_name = validated_data["name"]
-        admin_user = validated_data["admin_user"]
+        admin_user = self.context["request"].user
+        print(admin_user)
 
-        return RoomManagerService.create_room(
+        room_manager = RoomManagerService()
+        return room_manager.create_room(
             room_name=room_name, admin_user=admin_user
         )
 

@@ -16,8 +16,8 @@ def test_fetch_room():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user,
     )
 
@@ -39,8 +39,8 @@ def test_create_room():
         password="password",
     )
 
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user,
     )
     assert room.admin_user == user
@@ -59,8 +59,8 @@ def test_fetch_room_member():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user,
     )
     RoomMember.objects.create(user_id=user.id, room_id=room.id)
@@ -90,8 +90,8 @@ def test_fetch_room_members():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room1",
+    room = Room.objects.create(
+        name="test_room1",
         admin_user=user1,
     )
     room_member1 = RoomMember.objects.create(user_id=user1.id, room_id=room.id)

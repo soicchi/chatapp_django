@@ -14,7 +14,9 @@ def test_create_room():
         email="test@test.com",
         password="password",
     )
-    room = RoomManagerService.create_room(
+
+    room_manager = RoomManagerService()
+    room = room_manager.create_room(
         room_name="test_room",
         admin_user=user,
     )
@@ -39,8 +41,8 @@ def test_assign_new_admin():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user1,
     )
     RoomMember.objects.create(
@@ -70,8 +72,8 @@ def test_select_admin_user():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user1,
     )
     RoomMember.objects.create(
@@ -101,8 +103,8 @@ def test_set_admin_user():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user1,
     )
     RoomMember.objects.create(
@@ -126,9 +128,13 @@ def test_leave_room_with_one_user():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user,
+    )
+    RoomMember.objects.create(
+        user=user,
+        room=room,
     )
 
     room_membership = RoomMembershipService(room)
@@ -153,9 +159,13 @@ def test_leave_room_with_multiple_users():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user1,
+    )
+    RoomMember.objects.create(
+        user=user1,
+        room=room,
     )
     RoomMember.objects.create(
         user=user2,
@@ -164,6 +174,7 @@ def test_leave_room_with_multiple_users():
 
     room_membership = RoomMembershipService(room)
     room_membership.leave_room(user_id=user1.id)
+    room.refresh_from_db()
     assert room.admin_user == user2
     assert user1 not in room.users.all()
 
@@ -184,8 +195,8 @@ def test_join_room():
     )
 
     # テストルーム作成
-    room = RoomManagerService.create_room(
-        room_name="test_room",
+    room = Room.objects.create(
+        name="test_room",
         admin_user=user1,
     )
     RoomMember.objects.create(
