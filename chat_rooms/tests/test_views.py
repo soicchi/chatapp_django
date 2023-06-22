@@ -192,8 +192,8 @@ def test_leave_room_success(api_client, test_user):
     room = Room.objects.create(name="test_room", admin_user=test_user)
 
     # RoomMemberのレコードも追加
-    RoomMember.objects.create(user_id=test_user.id, room_id=room.id)
-    RoomMember.objects.create(user_id=test_user2.id, room_id=room.id)
+    RoomMember.objects.create(user=test_user, room=room)
+    RoomMember.objects.create(user=test_user2, room=room)
 
     input_data = {
         "user_id": test_user.id,

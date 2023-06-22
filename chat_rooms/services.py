@@ -14,7 +14,7 @@ class RoomManagerService:
         room = self.room_model.create_room(name=room_name, user=admin_user)
 
         # チャットルームのメンバーとしても管理ユーザーを追加
-        room_membership = RoomMembershipService(room)
+        room_membership = RoomMembershipService(room.id)
         room_membership.join_room(admin_user.id)
 
         return room
@@ -23,8 +23,10 @@ class RoomManagerService:
 class RoomMembershipService:
     """RoomMemberの操作を行うクラス"""
 
-    def __init__(self, room: Room) -> None:
-        self.room = room
+    def __init__(self, room_id: int, room_model=Room, room_member_model=RoomMember) -> None:
+        self.room_id = room_id
+        self.room_member_model = room_member_model
+        self.room = room_model.fetch_room(self.room_id)
 
     def assign_new_admin(self, admin_user_id: int) -> None:
         """新しい管理者をチャットルームに保存
@@ -49,7 +51,7 @@ class RoomMembershipService:
             CustomUser: 新しい管理ユーザーオブジェクト
         """
 
-        room_members = RoomMember.fetch_room_members(room_id=self.room.id)
+        room_members = self.room_member_model.fetch_room_members(room_id=self.room_id)
 
         # 現在の管理ユーザーを除いたユーザーの中で最も入室日が古いレコードを取得
         oldest_entry = (
@@ -58,7 +60,7 @@ class RoomMembershipService:
             .first()
         )
         if not oldest_entry:
-            raise ValueError(f"チャットルームにユーザーが存在しません。room_id: {self.room.id}")
+            raise ValueError(f"チャットルームにユーザーが存在しません。room_id: {self.room_id}")
 
         return oldest_entry.user
 
@@ -91,7 +93,7 @@ class RoomMembershipService:
             user_id (int): 退出するユーザーID
         """
 
-        room_members = RoomMember.fetch_room_members(room_id=self.room.id)
+        room_members = self.room_member_model.fetch_room_members(self.room_id)
         if self.room.admin_user.id == user_id and room_members.count() > 1:
             self.assign_new_admin(user_id)
 

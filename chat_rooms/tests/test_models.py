@@ -97,7 +97,7 @@ def test_fetch_room_members():
     room_member1 = RoomMember.objects.create(user_id=user1.id, room_id=room.id)
     room_member2 = RoomMember.objects.create(user_id=user2.id, room_id=room.id)
 
-    fetched_room_members = RoomMember.fetch_room_members(room_id=room.id)
+    fetched_room_members = RoomMember.fetch_room_members(room.id)
     assert room_member1 in fetched_room_members
     assert room_member2 in fetched_room_members
 

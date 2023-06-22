@@ -19,7 +19,6 @@ class CreateRoomSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict) -> Room:
         room_name = validated_data["name"]
         admin_user = self.context["request"].user
-        print(admin_user)
 
         room_manager = RoomManagerService()
         return room_manager.create_room(
@@ -69,8 +68,7 @@ class JoinRoomSerializer(serializers.Serializer):
         user_id = validated_data["user_id"]
         room_id = validated_data["room_id"]
 
-        target_room = Room.fetch_room(room_id)
-        room_membership = RoomMembershipService(target_room)
+        room_membership = RoomMembershipService(room_id)
         room_membership.join_room(user_id)
 
 
@@ -96,6 +94,5 @@ class LeaveRoomSerializer(serializers.Serializer):
         user_id = validated_data["user_id"]
         room_id = validated_data["room_id"]
 
-        target_room = Room.fetch_room(room_id)
-        room_membership = RoomMembershipService(target_room)
+        room_membership = RoomMembershipService(room_id)
         room_membership.leave_room(user_id)

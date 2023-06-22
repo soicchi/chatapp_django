@@ -50,8 +50,9 @@ def test_assign_new_admin():
         room=room,
     )
 
-    room_membership = RoomMembershipService(room)
+    room_membership = RoomMembershipService(room.id)
     room_membership.assign_new_admin(admin_user_id=user1.id)
+    room.refresh_from_db()
     assert room.admin_user == user2
     assert not room.admin_user == user1
 
@@ -81,8 +82,9 @@ def test_select_admin_user():
         room=room,
     )
 
-    room_membership = RoomMembershipService(room)
+    room_membership = RoomMembershipService(room.id)
     new_admin_user = room_membership._select_admin_user(admin_user_id=user1.id)
+    room.refresh_from_db()
     assert new_admin_user == user2
     assert not new_admin_user == user1
 
@@ -112,8 +114,9 @@ def test_set_admin_user():
         room=room,
     )
 
-    room_membership = RoomMembershipService(room)
+    room_membership = RoomMembershipService(room.id)
     room_membership._set_admin_user(new_admin_user=user2)
+    room.refresh_from_db()
     assert room.admin_user == user2
 
 
@@ -137,7 +140,7 @@ def test_leave_room_with_one_user():
         room=room,
     )
 
-    room_membership = RoomMembershipService(room)
+    room_membership = RoomMembershipService(room.id)
     room_membership.leave_room(user_id=user.id)
     assert not Room.objects.filter(pk=room.id).exists()
     assert not RoomMember.objects.filter(user_id=user.id).exists()
@@ -172,7 +175,7 @@ def test_leave_room_with_multiple_users():
         room=room,
     )
 
-    room_membership = RoomMembershipService(room)
+    room_membership = RoomMembershipService(room.id)
     room_membership.leave_room(user_id=user1.id)
     room.refresh_from_db()
     assert room.admin_user == user2
@@ -204,6 +207,7 @@ def test_join_room():
         room=room,
     )
 
-    room_membership = RoomMembershipService(room)
+    room_membership = RoomMembershipService(room.id)
     room_membership.join_room(user2.id)
+    room.refresh_from_db()
     assert user2 in room.users.all()

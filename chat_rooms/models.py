@@ -79,7 +79,7 @@ class RoomMember(models.Model):
             RoomMember: RoomMemberオブジェクト
         """
 
-        room_member = cls.objects.filter(user_id=user_id, room_id=room_id).first()
+        room_member = cls.objects.filter(user__id=user_id, room__id=room_id).first()
         if not room_member:
             raise ValueError(
                 f"RoomMemberが見つかりません。room_id: {room_id}, user_id: {user_id}"
@@ -92,7 +92,7 @@ class RoomMember(models.Model):
         """複数のRoomMemberオブジェクトを取得
 
         Args:
-            user_id (int): ユーザーID
+            room_id (int): チャットルームID
 
         Raises:
             ValueError: RoomMemberが見つからない場合
@@ -101,7 +101,7 @@ class RoomMember(models.Model):
             RoomMember: 複数のRoomMemberオブジェクト
         """
 
-        room_members = cls.objects.filter(room_id=room_id)
+        room_members = cls.objects.filter(room__id=room_id)
         if not room_members.exists():
             raise ValueError(f"RoomMemberが見つかりません。room_id: {room_id}")
 
