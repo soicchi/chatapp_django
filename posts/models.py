@@ -9,7 +9,8 @@ class Post(models.Model):
 
     TEXT = "text"
     IMAGE = "image"
-    MESSAGE_TYPE_CHOICES = ((TEXT, "テキスト"), (IMAGE, "画像"))
+    TEXT_IMAGE = "text_image"
+    MESSAGE_TYPE_CHOICES = ((TEXT, "テキスト"), (IMAGE, "画像"), (TEXT_IMAGE, "テキストと画像"))
 
     message = models.TextField(
         verbose_name="メッセージ",
