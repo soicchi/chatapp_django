@@ -4,7 +4,7 @@ from django.test import RequestFactory
 from rest_framework.exceptions import ValidationError
 
 from chat_rooms.models import Room
-from posts.serializers import CreatePostSerializer
+from posts.serializers import PostCreateSerializer
 
 
 @pytest.fixture
@@ -35,7 +35,7 @@ def test_create_post_success(initialize):
         "message": "テストメッセージ",
         "room_id": initialize["room"].id,
     }
-    serializer = CreatePostSerializer(data=input_data, context={"request": request})
+    serializer = PostCreateSerializer(data=input_data, context={"request": request})
     assert serializer.is_valid()
 
     post = serializer.save()
@@ -54,6 +54,6 @@ def test_validate_room_id(initialize):
         "room_id": initialize["room"].id + 1,
     }
 
-    serializer = CreatePostSerializer(data=input_data, context={"request": request})
+    serializer = PostCreateSerializer(data=input_data, context={"request": request})
     with pytest.raises(ValidationError, match="指定されたルームIDが見つかりません"):
         serializer.is_valid(raise_exception=True)

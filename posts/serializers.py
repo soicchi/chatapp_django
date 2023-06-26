@@ -6,7 +6,7 @@ from .models import Post
 from .services import PostManagerService
 
 
-class CreatePostSerializer(serializers.ModelSerializer):
+class PostCreateSerializer(serializers.ModelSerializer):
     """投稿を作成"""
 
     room_id = serializers.IntegerField()
@@ -37,3 +37,6 @@ class CreatePostSerializer(serializers.ModelSerializer):
         )
 
         return new_post
+
+
+
