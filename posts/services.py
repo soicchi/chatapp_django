@@ -1,5 +1,6 @@
-from .models import Post
 from chat_rooms.models import Room
+
+from .models import Post
 
 
 class PostManagerService:
@@ -22,8 +23,6 @@ class PostManagerService:
         """
 
         room = self.room_model.fetch_room(room_id)
-        post = self.post_model.objects.create(
-            message=message, user=user, room=room
-        )
+        post = self.post_model.objects.create(message=message, user=user, room=room)
 
         return post

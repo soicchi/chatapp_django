@@ -5,7 +5,6 @@ from chat_rooms.models import Room
 from posts.services import PostManagerService
 
 
-
 @pytest.mark.django_db
 def test_create_post():
     # テストユーザー作成

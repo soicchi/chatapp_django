@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
+from chat_rooms.services import RoomManagerService
+
 from .models import Post
 from .services import PostManagerService
-from chat_rooms.services import RoomManagerService
 
 
 class CreatePostSerializer(serializers.ModelSerializer):

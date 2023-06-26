@@ -27,7 +27,9 @@ class RoomManagerService:
 class RoomMembershipService:
     """RoomMemberの操作を行うクラス"""
 
-    def __init__(self, room_id: int, room_model=Room, room_member_model=RoomMember) -> None:
+    def __init__(
+        self, room_id: int, room_model=Room, room_member_model=RoomMember
+    ) -> None:
         self.room_id = room_id
         self.room_member_model = room_member_model
         self.room = room_model.fetch_room(self.room_id)

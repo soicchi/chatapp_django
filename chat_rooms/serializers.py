@@ -21,9 +21,7 @@ class CreateRoomSerializer(serializers.ModelSerializer):
         admin_user = self.context["request"].user
 
         room_manager = RoomManagerService()
-        return room_manager.create_room(
-            room_name=room_name, admin_user=admin_user
-        )
+        return room_manager.create_room(room_name=room_name, admin_user=admin_user)
 
 
 class RoomListSerializer(serializers.ModelSerializer):

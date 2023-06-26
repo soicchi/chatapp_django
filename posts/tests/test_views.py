@@ -5,7 +5,6 @@ from rest_framework.test import APIClient
 
 from chat_rooms.models import Room
 
-
 BASE_POSTS_URI_NAME = "posts"
 
 
@@ -41,5 +40,7 @@ def test_create_post(api_client, initialize):
         "message": "テストメッセージ",
         "room_id": initialize["room"].id,
     }
-    response = api_client.post(reverse(f"posts:{BASE_POSTS_URI_NAME}-list"), data=input_data, format="json")
+    response = api_client.post(
+        reverse(f"posts:{BASE_POSTS_URI_NAME}-list"), data=input_data, format="json"
+    )
     assert response.status_code == 201
