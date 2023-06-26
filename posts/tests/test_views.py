@@ -62,11 +62,15 @@ def test_create_post_unauthenticated(api_client, initialize):
 def test_fetch_list_post_authenticated(api_client, initialize):
     # テストユーザーでログイン
     api_client.force_authenticate(user=initialize["user"])
-    response = api_client.get(reverse(f"posts:{BASE_POSTS_URI_NAME}-list"), format="json")
+    response = api_client.get(
+        reverse(f"posts:{BASE_POSTS_URI_NAME}-list"), format="json"
+    )
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
 def test_fetch_list_post_unauthenticated(api_client, initialize):
-    response = api_client.get(reverse(f"posts:{BASE_POSTS_URI_NAME}-list"), format="json")
+    response = api_client.get(
+        reverse(f"posts:{BASE_POSTS_URI_NAME}-list"), format="json"
+    )
     assert response.status_code == 401
