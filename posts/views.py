@@ -2,7 +2,7 @@ from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Post
-from .serializers import PostCreateSerializer
+from .serializers import PostCreateSerializer, PostListSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -14,3 +14,5 @@ class PostViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> serializers.Serializer:
         if self.action == "create":
             return PostCreateSerializer
+        elif self.action == "list":
+            return PostListSerializer

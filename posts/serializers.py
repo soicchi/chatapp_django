@@ -39,4 +39,9 @@ class PostCreateSerializer(serializers.ModelSerializer):
         return new_post
 
 
+class PostListSerializer(serializers.ModelSerializer):
+    """投稿の一覧を取得"""
 
+    class Meta:
+        model = Post
+        fields = ["id", "message", "user", "created_at"]
