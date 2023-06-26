@@ -19,6 +19,10 @@ class RoomManagerService:
 
         return room
 
+    def fetch_room(self, room_id: int) -> Room:
+        room = Room.fetch_room(room_id)
+        return room
+
 
 class RoomMembershipService:
     """RoomMemberの操作を行うクラス"""
